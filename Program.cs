@@ -44,8 +44,15 @@
                 {
                     Console.Write("2.Enter customer name: ");
                     string name = Console.ReadLine();
-                    AddCustomer(ref clients, name);
-                    Console.WriteLine("Client successfully added!");
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        Console.WriteLine("error: Enter the customer's name!"); ;
+                    }
+                    else
+                    {
+                        AddCustomer(ref clients, name);
+                        Console.WriteLine("Client successfully added!");
+                    }                       
                 }
                 Console.WriteLine();
                 if(choice == "3")
