@@ -22,7 +22,7 @@ namespace word_out
                 Console.WriteLine($"Client {i + 1}: {clientArr[i]}");
             Console.WriteLine("---------------------------------\n");           
         }
-        static int SearchCustomer(ref string[]clientArr, string name)
+        static int SearchCustomer(string[]clientArr, string name)
         {
             for(int i = 0; i < clientArr.Length; i++)
             {
@@ -50,15 +50,25 @@ namespace word_out
             
             string[] clients = { "Andriy", "Yaroslav", "Oleksandr", "Ihor", "Yuriy" };
 
+            Console.ForegroundColor = ConsoleColor.Magenta;
+
+            Console.WriteLine("Greeting!\n");
+            Console.WriteLine(DateTime.Now + "\n");
+
+            Console.ResetColor();
+
             while (true)
             {
-                Console.WriteLine("MENU");
-                Console.WriteLine("1. Show clients list");
-                Console.WriteLine("2. Add new client");
-                Console.WriteLine("3. Customer search");
-                Console.WriteLine("4. Exit");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.BackgroundColor = ConsoleColor.DarkGreen;
+
+                Console.WriteLine("MENU".PadRight(25));
+                Console.WriteLine("1. Show clients list".PadRight(25));
+                Console.WriteLine("2. Add new client".PadRight(25));
+                Console.WriteLine("3. Customer search".PadRight(25));
+                Console.WriteLine("4. Exit".PadRight(25));
+                Console.ResetColor();
                 Console.Write("Choice number: ");
-                Console.WriteLine();
 
                 string choice = Console.ReadLine();
 
@@ -91,7 +101,7 @@ namespace word_out
 
                     if (IsValidName(name))
                     {
-                        int indexOfName = SearchCustomer(ref clients, name);
+                        int indexOfName = SearchCustomer(clients, name);
                         Console.WriteLine($"The name {name} is under the index: {indexOfName}");
                     }
                                       
