@@ -1,10 +1,21 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Security.Cryptography;
+using System.IO;
 
 namespace word_out
 {
     internal class Program
     {
+        static string filePath = "clients_db.txt";
+        static void ShowAll(string[] clientArr)
+        {
+            Console.WriteLine("------ Current client list ------");
+            for (int i = 0; i < clientArr.Length; i++)
+                Console.WriteLine($"Client {i + 1}: {clientArr[i]}");
+            Console.WriteLine("---------------------------------\n");           
+        }
+        
         static void AddCustomer(ref string[] clientArr,string clientName)
         {
             string[] newClientArr = new string[clientArr.Length + 1];
@@ -15,13 +26,7 @@ namespace word_out
             }
             clientArr = newClientArr;            
         }
-        static void ShowAll(string[] clientArr)
-        {
-            Console.WriteLine("------ Current client list ------");
-            for (int i = 0; i < clientArr.Length; i++)
-                Console.WriteLine($"Client {i + 1}: {clientArr[i]}");
-            Console.WriteLine("---------------------------------\n");           
-        }
+        
         static int SearchCustomer(string[]clientArr, string name)
         {
             for(int i = 0; i < clientArr.Length; i++)
@@ -44,11 +49,22 @@ namespace word_out
 
             return true;
         }
-        
+        static void SaveData(string[] clients)
+        {
+            File.WriteAllLines(filePath, clients);
+            Console.WriteLine("[System]: Data saved succesfully.");
+        }
+        static string[] LoadData()
+        {
+            if (File.Exists(filePath))
+                return File.ReadAllLines(filePath);
+            return new string[0];
+        }
+
         static void Main(string[] args)
         {
             
-            string[] clients = { "Andriy", "Yaroslav", "Oleksandr", "Ihor", "Yuriy" };
+            string[] clients = LoadData();
 
             Console.ForegroundColor = ConsoleColor.Magenta;
 
@@ -60,16 +76,16 @@ namespace word_out
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.BackgroundColor = ConsoleColor.DarkGreen;
 
                 Console.WriteLine("MENU".PadRight(25));
                 Console.WriteLine("1. Show clients list".PadRight(25));
                 Console.WriteLine("2. Add new client".PadRight(25));
                 Console.WriteLine("3. Customer search".PadRight(25));
-                Console.WriteLine("4. Exit".PadRight(25));
+                Console.Write("4. Exit".PadRight(25));
                 Console.ResetColor();
-                Console.Write("Choice number: ");
+                Console.WriteLine();
 
+                Console.Write("Choice number: ");
                 string choice = Console.ReadLine();
 
                 if(choice == "1")
@@ -84,6 +100,7 @@ namespace word_out
                     if (IsValidName(name))
                     {
                         AddCustomer(ref clients, name);
+                        SaveData(clients);
                         Console.WriteLine("Client successfully added!");
                     }
                     else
