@@ -66,13 +66,12 @@ namespace word_out
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
-                Console.WriteLine("MENU".PadRight(25));
-                Console.WriteLine("1. Show clients list".PadRight(25));
-                Console.WriteLine("2. Add new client".PadRight(25));
-                Console.WriteLine("3. Customer search".PadRight(25));
-                Console.Write(    "4. Exit".PadRight(25));
-                Console.ResetColor();
-                Console.WriteLine();
+                Console.WriteLine("MENU");
+                Console.WriteLine("1. Show clients list");
+                Console.WriteLine("2. Add new client");
+                Console.WriteLine("3. Customer search");
+                Console.WriteLine("4. Delete the entire list"); 
+                Console.WriteLine("5. Exit");
 
                 Console.Write("Choice number: ");
                 string choice = Console.ReadLine();
@@ -84,7 +83,7 @@ namespace word_out
                 Console.WriteLine();
                 if(choice == "2")
                 {
-                    Console.Write("2.Enter customer name: ");
+                    Console.Write("Enter customer name: ");
                     string name = Console.ReadLine();
                     if (IsValidName(name))
                     {
@@ -113,8 +112,22 @@ namespace word_out
                                       
                     Console.WriteLine();  
                 }
-                
                 if(choice == "4")
+                {
+                    Console.WriteLine("Delete the entire database? (yes/no)");
+                    string option = Console.ReadLine();
+
+                    if(option == "yes")
+                    {
+                        clients.Clear();
+                        SaveData(clients);
+                        Console.WriteLine("[System]: The database has been cleared.\n");
+                    }
+                    if(option == "no")                   
+                        continue;                   
+                }
+                
+                if(choice == "5")
                 {
                     Console.WriteLine("Goodbye!");
                     break;
