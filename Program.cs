@@ -1,70 +1,59 @@
 ﻿using System;
 using System.Data;
 using System.Security.Cryptography;
-using System.IO;
 
 namespace word_out
 {
     internal class Program
     {
         static string filePath = "clients_db.txt";
-        static void ShowAll(string[] clientArr)
+        static void ShowAll(List<string> clients)
         {
             Console.WriteLine("------ Current client list ------");
-            for (int i = 0; i < clientArr.Length; i++)
-                Console.WriteLine($"Client {i + 1}: {clientArr[i]}");
+            for (int i = 0; i < clients.Count; i++)
+                Console.WriteLine($"Client {i + 1}: {clients[i]}");
             Console.WriteLine("---------------------------------\n");           
         }
         
-        static void AddCustomer(ref string[] clientArr,string clientName)
+        static void AddCustomer(List<string> clients,string clientName)
         {
-            string[] newClientArr = new string[clientArr.Length + 1];
-            newClientArr[newClientArr.Length - 1] = clientName;
-            for(int i =0;i < clientArr.Length; i++)
-            {
-                newClientArr[i] = clientArr[i];
-            }
-            clientArr = newClientArr;            
+            clients.Add(clientName);           
         }
         
-        static int SearchCustomer(string[]clientArr, string name)
+        static int SearchCustomer(List<string> clients, string clientName)
         {
-            for(int i = 0; i < clientArr.Length; i++)
-            {
-                if(clientArr[i] == name)
-                {
-                    return i;
-                }
-            }
-            return -1;
+            return clients.IndexOf(clientName);
         }
-        static bool IsValidName(string name)
+        static bool IsValidName(string clientName)
         {
-            if (string.IsNullOrWhiteSpace(name)) return false;
+            if (string.IsNullOrWhiteSpace(clientName)) return false;
 
-            foreach(char c in name)
+            foreach(char c in clientName)
             {
                 if (!char.IsLetter(c) && c != ' ') return false;
             }
 
             return true;
         }
-        static void SaveData(string[] clients)
+        static void SaveData(List<string> clients)
         {
-            File.WriteAllLines(filePath, clients);
-            Console.WriteLine("[System]: Data saved succesfully.");
+            File.WriteAllLines(filePath, clients.ToArray());
+            Console.WriteLine("[System]: Data saved succesfully.\n");
         }
-        static string[] LoadData()
+        static List<string> LoadData()
         {
             if (File.Exists(filePath))
-                return File.ReadAllLines(filePath);
-            return new string[0];
+            {
+                string[] fileData = File.ReadAllLines(filePath);
+                return new List<string>(fileData);
+            }
+            return new List<string>();
         }
 
         static void Main(string[] args)
         {
             
-            string[] clients = LoadData();
+            List<string> clients = LoadData();
 
             Console.ForegroundColor = ConsoleColor.Magenta;
 
@@ -81,7 +70,7 @@ namespace word_out
                 Console.WriteLine("1. Show clients list".PadRight(25));
                 Console.WriteLine("2. Add new client".PadRight(25));
                 Console.WriteLine("3. Customer search".PadRight(25));
-                Console.Write("4. Exit".PadRight(25));
+                Console.Write(    "4. Exit".PadRight(25));
                 Console.ResetColor();
                 Console.WriteLine();
 
@@ -99,7 +88,7 @@ namespace word_out
                     string name = Console.ReadLine();
                     if (IsValidName(name))
                     {
-                        AddCustomer(ref clients, name);
+                        AddCustomer(clients, name);
                         SaveData(clients);
                         Console.WriteLine("Client successfully added!");
                     }
