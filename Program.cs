@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Globalization;
 using System.Security.Cryptography;
 
 namespace word_out
@@ -7,14 +8,30 @@ namespace word_out
     internal class Program
     {
         static string filePath = "clients_db.txt";
-        static void ShowAll(List<string> clients)
+        static void ShowAll(List<string> clients, bool sortByAlphabet = false, bool fromShortToLong = false)            
         {
-            Console.WriteLine("------ Current client list ------");
-            for (int i = 0; i < clients.Count; i++)
-                Console.WriteLine($"Client {i + 1}: {clients[i]}");
-            Console.WriteLine("---------------------------------\n");           
+            List<string> listToPrint;
+
+            if (sortByAlphabet)
+            {
+                listToPrint = new List<string>(clients);
+                listToPrint.Sort();
+            }
+            if (fromShortToLong)
+            {
+                listToPrint = new List<string>(clients);
+                listToPrint.Sort((x,y) => x.Length.CompareTo(y.Length));
+            }
+            else
+            {
+                listToPrint = clients;
+            }
+
+                Console.WriteLine("------ Current client list ------");
+            for (int i = 0; i < listToPrint.Count; i++)
+                Console.WriteLine($"Client {i + 1}: {listToPrint[i]}");
+            Console.WriteLine("---------------------------------\n");
         }
-        
         static void AddCustomer(List<string> clients,string clientName)
         {
             clients.Add(clientName);           
@@ -67,6 +84,8 @@ namespace word_out
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("MENU");
                 Console.WriteLine("1. Show clients list");
+                Console.WriteLine("1.1. Show list of clients alphabetically");
+                Console.WriteLine("1.2. Show list of clients from short to long");
                 Console.WriteLine("2. Add new client");
                 Console.WriteLine("3. Customer search");
                 Console.WriteLine("4. Delete the entire list");
@@ -82,7 +101,20 @@ namespace word_out
                     ShowAll(clients);
                 }
                 Console.WriteLine();
-                if(choice == "2")
+
+                if (choice == "1.1")
+                {
+                    ShowAll(clients, sortByAlphabet: true);
+                }
+                Console.WriteLine();
+
+                if (choice == "1.2")
+                {
+                    ShowAll(clients, fromShortToLong: true);
+                }
+                Console.WriteLine();
+
+                if (choice == "2")
                 {
                     Console.Write("Enter customer name: ");
                     string name = Console.ReadLine();
