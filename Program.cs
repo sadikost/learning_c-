@@ -10,27 +10,23 @@ namespace word_out
         static string filePath = "clients_db.txt";
         static void ShowAll(List<string> clients, bool sortByAlphabet = false, bool fromShortToLong = false)            
         {
-            List<string> listToPrint;
+            List<string> listToPrint = clients;
 
             if (sortByAlphabet)
             {
                 listToPrint = new List<string>(clients);
                 listToPrint.Sort();
             }
-            if (fromShortToLong)
+            else if (fromShortToLong)
             {
                 listToPrint = new List<string>(clients);
-                listToPrint.Sort((x,y) => x.Length.CompareTo(y.Length));
+                listToPrint.Sort((x, y) => x.Length.CompareTo(y.Length));
             }
-            else
-            {
-                listToPrint = clients;
-            }
-
-                Console.WriteLine("------ Current client list ------");
+            
+            Console.WriteLine("------ Current client list ------");
             for (int i = 0; i < listToPrint.Count; i++)
                 Console.WriteLine($"Client {i + 1}: {listToPrint[i]}");
-            Console.WriteLine("---------------------------------\n");
+            Console.WriteLine("---------------------------------\n");         
         }
         static void AddCustomer(List<string> clients,string clientName)
         {
@@ -164,7 +160,7 @@ namespace word_out
                     Console.WriteLine("Enter a client number to remove: ");
                     int indexToDelete = int.Parse(Console.ReadLine()) - 1;
 
-                    if (indexToDelete >= 0 && indexToDelete <= clients.Count)
+                    if (indexToDelete >= 0 && indexToDelete < clients.Count)
                     {
                         clients.RemoveAt(indexToDelete);
                         SaveData(clients);
