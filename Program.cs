@@ -65,13 +65,14 @@ namespace word_out
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-
                 Console.WriteLine("MENU");
                 Console.WriteLine("1. Show clients list");
                 Console.WriteLine("2. Add new client");
                 Console.WriteLine("3. Customer search");
-                Console.WriteLine("4. Delete the entire list"); 
-                Console.WriteLine("5. Exit");
+                Console.WriteLine("4. Delete the entire list");
+                Console.WriteLine("5. Remove customer");
+                Console.WriteLine("6. Exit");
+                Console.WriteLine();
 
                 Console.Write("Choice number: ");
                 string choice = Console.ReadLine();
@@ -126,8 +127,21 @@ namespace word_out
                     if(option == "no")                   
                         continue;                   
                 }
+                if (choice == "5")
+                {
+                    Console.WriteLine("Enter a client number to remove: ");
+                    int indexToDelete = int.Parse(Console.ReadLine()) - 1;
+
+                    if (indexToDelete >= 0 && indexToDelete <= clients.Count)
+                    {
+                        clients.RemoveAt(indexToDelete);
+                        SaveData(clients);
+                        Console.WriteLine("Сlient successfully deleted.\n");
+                    }
+                    else Console.WriteLine("Error: client with that name does not exist.\n");
+                }
                 
-                if(choice == "5")
+                if(choice == "6")
                 {
                     Console.WriteLine("Goodbye!");
                     break;
